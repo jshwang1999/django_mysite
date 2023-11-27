@@ -71,8 +71,12 @@ POST 방식: HTTP Request로 데이터를 전달한다.(글자 수 제한 없음
 구현하고 있는 기능: allauth로 소셜로그인 기능 구현
 * pip install django_allauth, settings.py에 추가 완료
 - **To Dos**
-  - python manage.py makemigrations > 1 > 1   
-  - python manage.py migrate
+  - 기존 게시글 DB에 작성자 속성(Author) 추가로 migration 진행
+    - python manage.py makemigrations > 1 > 1   
+    - python manage.py migrate
+      - github update project 후 common/login 접속 시도시 'Site Query Does not Exist' 에러 발생   
+        -> django_site 테이블과 관련이 있음
+        -> config/settings.py의 SITE_ID = n 확인
 
 references:
 https://velog.io/@justpotato/django-google로그인-구현하기

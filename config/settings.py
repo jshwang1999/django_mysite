@@ -32,7 +32,6 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     # allauth
-    'django.contrib.sites',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
@@ -40,6 +39,7 @@ INSTALLED_APPS = [
     # Naver, Google, Facebook 등 가능
 
     'common.apps.CommonConfig',
+    'django.contrib.sites',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -55,7 +55,7 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-# SITE_ID = 1
+SITE_ID = 1
 #
 # LOGIN_REDIRECT_URL = '/'  # 로그인 후 리다이렉트 될 경로
 # ACCOUNT_LOGOUT_REDIRECT_URL = reverse_lazy('accountapp:login')
