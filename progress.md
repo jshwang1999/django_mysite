@@ -76,7 +76,7 @@ POST 방식: HTTP Request로 데이터를 전달한다.(글자 수 제한 없음
     - python manage.py migrate
       - github update project 후 common/login 접속 시도시 'Site Query Does not Exist' 에러 발생   
         -> django_site 테이블과 관련이 있음
-        -> config/settings.py의 SITE_ID = n 확인
+        -> config/settings.py의 SITE_ID = n 존재여부 확인
 
 references:
 https://velog.io/@justpotato/django-google로그인-구현하기
