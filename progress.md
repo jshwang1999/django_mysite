@@ -62,9 +62,22 @@ POST 방식: HTTP Request로 데이터를 전달한다.(글자 수 제한 없음
 
 ***
 2023.11.27(월) - 13주차(중간 성과 제출기간)
-수업 진도: 
-구현한 기능: 
+수업 진도:   
+구현한 기능:   
+* 회원가입 기능 
+* 로그인 기능 
+* 게시글 및 질문글 수정/삭제 기능 구현(3.11)
 
+구현하고 있는 기능: allauth로 소셜로그인 기능 구현
+* pip install django_allauth, settings.py에 추가 완료
+- **To Dos**
+  - python manage.py makemigrations > 1 > 1   
+  - python manage.py migrate
+
+references:
+https://velog.io/@justpotato/django-google로그인-구현하기
+https://support-u-oneday.tistory.com/103
+https://velog.io/@yevini118/Django-allauth-카카오-로그인하기
 ***
 2023.12.04(월) - 14주차
 수업 진도:
