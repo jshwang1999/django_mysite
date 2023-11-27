@@ -1,3 +1,5 @@
+# 회원가입 기능을 구현한 소스코드
+
 from django.contrib.auth import authenticate, login
 from django.shortcuts import render, redirect
 from common.forms import UserForm

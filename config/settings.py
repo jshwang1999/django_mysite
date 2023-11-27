@@ -36,7 +36,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.kakao',  # Kakao 로그인
-    # Naver, Google, Facebook 등 가능
+    # allauth 사용으로 Naver, Google, Facebook 등 로그인 가능
 
     'common.apps.CommonConfig',
     'django.contrib.sites',
@@ -56,7 +56,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SOCIALACCOUNT_LOGIN_ON_GET = True  # Kakao 로그인 시 중간 창 경유 없이 바로 로그인 화면으로 전환
-LOGIN_REDIRECT_URL = 'index'  # 로그인 성공 시 리다이렉트 될 URL 주소
+# LOGIN_REDIRECT_URL = 'index'  # 로그인 성공 시 리다이렉트 될 URL 주소
 ACCOUNT_LOGOUT_REDIRECT_URL = 'index'  # 로그아웃 성공 시 리다이렉트 될 URL 주소
 ACCOUNT_LOGOUT_ON_GET = True  # 로그아웃 요청 즉시 로그아웃
 
