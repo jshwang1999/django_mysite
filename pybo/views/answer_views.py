@@ -1,10 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, resolve_url
 from django.utils import timezone
 
-from ..forms import AnswerForm
-from ..models import Question, Answer
+from ..forms import AnswerForm, CommentForm
+from ..models import Question, Answer, Comment
 
 
 @login_required(login_url='common:login')
@@ -18,7 +18,8 @@ def answer_create(request, question_id):
             answer.create_date = timezone.now()
             answer.question = question
             answer.save()
-            return redirect('pybo:detail', question_id=question.id)
+            return redirect('{}#answer_{}'.format(
+                resolve_url('pybo:detail', question_id=question.id), answer.id))
     else:
         form = AnswerForm()
     context = {'question': question, 'form': form}
@@ -37,7 +38,8 @@ def answer_modify(request, answer_id):
             answer = form.save(commit=False)
             answer.modify_date = timezone.now()
             answer.save()
-            return redirect('pybo:detail', question_id=answer.question.id)
+            return redirect('{}#answer_{}'.format(
+                resolve_url('pybo:detail', question_id=answer.question.id), answer.id))
     else:
         form = AnswerForm(instance=answer)
     context = {'answer': answer, 'form': form}
@@ -52,3 +54,65 @@ def answer_delete(request, answer_id):
     else:
         answer.delete()
     return redirect('pybo:detail', question_id=answer.question.id)
+
+
+@login_required(login_url='common:login')
+def answer_vote(request, answer_id):
+    answer = get_object_or_404(Answer, pk=answer_id)
+    if request.user == answer.author:
+        messages.error(request, '본인이 작성한 글은 추천할수 없습니다')
+    else:
+        answer.voter.add(request.user)
+    return redirect('{}#answer_{}'.format(
+        resolve_url('pybo:detail', question_id=answer.question.id), answer.id))
+
+
+# 코멘트 생성
+@login_required(login_url='common:login')
+def comment_create_answer(request, answer_id):
+    answer = get_object_or_404(Answer, pk=answer_id)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.create_date = timezone.now()
+            comment.answer = answer
+            comment.save()
+            return redirect('pybo:detail', question_id=comment.answer.question.id)
+    else:
+        form = CommentForm()
+    context = {'form': form}
+    return render(request, 'pybo/comment_form.html', context)
+
+
+@login_required(login_url='common:login')
+def comment_modify_answer(request, comment_id):
+
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if request.user != comment.author:
+        messages.error(request, '코멘트를 수정할 수 없습니다.(권한 없음)')
+        return redirect('pybo:detail', question_id=comment.answer.question.id)
+
+    if request.method == "POST":
+        form = CommentForm(request.POST, instance=comment)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.modify_date = timezone.now()
+            comment.save()
+            return redirect('pybo:detail', question_id=comment.answer.question.id)
+    else:
+        form = CommentForm(instance=comment)
+    context = {'form': form}
+    return render(request, 'pybo/comment_form.html', context)
+
+
+@login_required(login_url='common:login')
+def comment_delete_answer(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    if request.user != comment.author:
+        messages.error(request, '코멘트를 삭제할 수 없습니다.(권한 없음)')
+        return redirect('pybo:detail', question_id=comment.answer.question.id)
+    else:
+        comment.delete()
+    return redirect('pybo:detail', question_id=comment.answer.question.id)

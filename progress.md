@@ -96,3 +96,5 @@ https://velog.io/@yevini118/Django-allauth-카카오-로그인하기
 <mid>- The End -</mid>
 
 최종적으로_구현한_기능 = ['example', 'etc']
+
+[파이썬 공식 홈페이지](http://www.python.org)

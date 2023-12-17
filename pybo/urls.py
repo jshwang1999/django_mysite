@@ -11,6 +11,10 @@ urlpatterns = [
     path('<int:question_id>/',
          base_views.detail, name='detail'),
 
+
+    path('question/vote/<int:question_id>/', question_views.question_vote, name='question_vote'),
+    path('answer/vote/<int:answer_id>/', answer_views.answer_vote, name='answer_vote'),
+
     # question_views.py
     path('question/create/',
          question_views.question_create, name='question_create'),
@@ -26,4 +30,11 @@ urlpatterns = [
          answer_views.answer_modify, name='answer_modify'),
     path('answer/delete/<int:answer_id>/',
          answer_views.answer_delete, name='answer_delete'),
+
+    path('comment/create/answer/<int:answer_id>/',
+         answer_views.comment_create_answer, name='comment_create_answer'),
+    path('comment/modify/answer/<int:comment_id>/',
+         answer_views.comment_modify_answer, name='comment_modify_answer'),
+    path('comment/delete/answer/<int:comment_id>/',
+         answer_views.comment_delete_answer, name='comment_delete_answer'),
 ]
