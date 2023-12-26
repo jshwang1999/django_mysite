@@ -1,9 +1,17 @@
 from django.db import models
-
-# Create your models here.
-from django.db import models
 from django.contrib.auth.models import User
+
+from django.utils import timezone
+
 # DB 모델들
+
+
+class Notices(models.Model):
+    objects = models.Manager()
+    n_title = models.CharField(max_length=100)
+    n_body = models.TextField()
+    n_hit = models.PositiveIntegerField(default=0)
+    n_input_date = models.DateTimeField('date published', default=timezone.now())
 
 
 class Question(models.Model):  # 질문글
@@ -14,6 +22,7 @@ class Question(models.Model):  # 질문글
     create_date = models.DateTimeField()
     modify_date = models.DateTimeField(null=True, blank=True)
     voter = models.ManyToManyField(User, related_name='voter_question')
+    attachment = models.ImageField(upload_to="media", null=True, blank=True)
 
 
 class Answer(models.Model):  # 답변글

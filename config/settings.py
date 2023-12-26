@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Application definition
 
@@ -38,6 +40,8 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.kakao',  # Kakao 로그인
     # allauth 사용으로 Naver, Google, Facebook 등 로그인 가능
 
+    'channels',
+    'chat.apps.ChatConfig',
     'common.apps.CommonConfig',
     'django.contrib.sites',
     'django.contrib.admin',
@@ -53,6 +57,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
+
+ASGI_APPLICATION = 'mysite.asgi.application'
 
 SOCIALACCOUNT_LOGIN_ON_GET = True  # Kakao 로그인 시 중간 창 경유 없이 바로 로그인 화면으로 전환
 # LOGIN_REDIRECT_URL = 'index'  # 로그인 성공 시 리다이렉트 될 URL 주소
@@ -75,12 +81,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], # templates 폴더를 발견하면, 자동으로 템플릿 폴더로 인식
+        'DIRS': [BASE_DIR / 'templates'],  # templates 폴더를 발견하면, 자동으로 템플릿 폴더로 인식
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

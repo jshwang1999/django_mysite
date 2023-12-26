@@ -13,38 +13,45 @@
                 {% endfor %}
             </div>
         {% endif %}
-        <!-- 질문 -->
-        <h2 class="border-bottom py-2">{{ question.subject }}</h2>
-        <div class="card my-3">
-            <div class="card-body">
-                <div class="card-text" style="white-space: pre-line;">{{ question.content|mark }}</div>
+ <!-- 질문 -->
+<h2 class="border-bottom py-2">{{ question.subject }}</h2>
+<div class="card my-3">
+    <div class="card-body">
+        <div class="card-text" style="white-space: pre-line;">{{ question.content|mark }}</div>
 
-                <div class="d-flex justify-content-end">
-                    {% if question.modify_date %}
-                        <div class="badge bg-light text-dark p-2 text-start mx-3">
-                            <div class="mb-2">modified at</div>
-                            <div>{{ question.modify_date }}</div>
-                        </div>
-                    {% endif %}
-                    <div class="badge bg-light text-dark p-2 text-start">
-                        <div class="mb-2">{{ question.author.username }}</div>
-                        <div> {{ question.create_date }}</div>
-                    </div>
+        {% if question.attachment %}
+            <!-- 이미지를 표시할 위치에 추가 -->
+            <img src="{{ question.attachment.url }}" alt="첨부된 이미지">
+        {% endif %}
+
+        <div class="d-flex justify-content-end">
+            {% if question.modify_date %}
+                <div class="badge bg-light text-dark p-2 text-start mx-3">
+                    <div class="mb-2">modified at</div>
+                    <div>{{ question.modify_date }}</div>
                 </div>
-                <div class="my-3">
-                    <a href="javascript:void(0)" data-uri="{% url 'pybo:question_vote' question.id %}"
-                       class="recommend btn btn-sm btn-outline-secondary"> 추천
-                        <span class="badge rounded-pill bg-success">{{ question.voter.count }}</span>
-                    </a>
-                    {% if request.user == question.author %}
-                        <a href="{% url 'pybo:question_modify' question.id %}"
-                           class="btn btn-sm btn-outline-primary">수정</a>
-                        <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-danger"
-                           data-uri="{% url 'pybo:question_delete' question.id %}">삭제</a>
-                    {% endif %}
-                </div>
+            {% endif %}
+            <div class="badge bg-light text-dark p-2 text-start">
+                <div class="mb-2">{{ question.author.username }}</div>
+                <div> {{ question.create_date }}</div>
             </div>
         </div>
+        <div class="my-3">
+            <a href="javascript:void(0)" data-uri="{% url 'pybo:question_vote' question.id %}"
+                class="recommend btn btn-sm btn-outline-secondary"> 추천
+                <span class="badge rounded-pill bg-success">{{ question.voter.count }}</span>
+            </a>
+            <button id="copyUrlButton" class="btn btn-sm btn-outline-primary">URL 공유</button>
+            {% if request.user == question.author %}
+                <a href="{% url 'pybo:question_modify' question.id %}"
+                    class="btn btn-sm btn-outline-primary">수정</a>
+                <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-danger"
+                    data-uri="{% url 'pybo:question_delete' question.id %}">삭제</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
 
         <!-- 답변 -->
         <h5 class="border-bottom my-3 py-2">{{ question.answer_set.count }}개의 답변이 있습니다.</h5>
@@ -152,6 +159,22 @@
         function showComment() {
             commentVisible = true;
         }
+
+        // URL 공유 버튼 클릭 시 URL 복사
+        const copyUrlButton = document.getElementById("copyUrlButton");
+        copyUrlButton.addEventListener('click', function () {
+            const urlToCopy = window.location.href;
+
+            // Use the Clipboard API to copy the URL
+            navigator.clipboard.writeText(urlToCopy)
+                .then(() => {
+                    alert("URL이 복사되었습니다: " + urlToCopy);
+                })
+                .catch(err => {
+                    console.error('Failed to copy text: ', err);
+                    alert('URL 복사에 실패했습니다.');
+                });
+        });
 
     </script>
 {% endblock %}

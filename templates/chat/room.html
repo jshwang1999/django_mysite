@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="container my-3">
+        <!-- Django 템플릿으로 변수를 전달 -->
+        <script>
+            const roomName = "{{ room_name }}";
+            const wsProtocol = window.location.protocol === "https:" ? "wss" : "ws";
+            const socket = new WebSocket(`${wsProtocol}://${window.location.host}/ws/chat/${roomName}/`);
+
+            socket.onopen = function (event) {
+                console.log("WebSocket connection opened:", event);
+            };
+
+            socket.onmessage = function (event) {
+                const data = JSON.parse(event.data);
+                console.log("WebSocket message received:", data);
+                // Handle the received message (e.g., append it to the chat room)
+            };
+
+            socket.onclose = function (event) {
+                console.log("WebSocket connection closed:", event);
+            };
+
+            // Add event listeners to handle user input and send messages
+            // (e.g., when the user presses enter in the chat input field)
+        </script>
+    </div>
+{% endblock %}

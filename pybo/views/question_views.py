@@ -2,17 +2,21 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
+from django.utils.datastructures import MultiValueDictKeyError
 
-from ..forms import QuestionForm, CommentForm
+from ..forms import QuestionForm
 from ..models import Question
 
 
 @login_required(login_url='common:login')
 def question_create(request):
     if request.method == 'POST':
-        form = QuestionForm(request.POST)
+        form = QuestionForm(request.POST, request.FILES)
         if form.is_valid():
             question = form.save(commit=False)
+            if 'attachment' in request.FILES:
+                question.attachment = request.FILES['attachment']
+
             question.author = request.user  # author 속성에 로그인 계정 저장
             question.create_date = timezone.now()
             question.save()
@@ -32,6 +36,8 @@ def question_modify(request, question_id):
     if request.method == "POST":
         form = QuestionForm(request.POST, instance=question)
         if form.is_valid():
+            if 'attachment' in request.FILES:
+                question.attachment = request.FILES['attachment']
             question = form.save(commit=False)
             question.modify_date = timezone.now()  # 수정일시 저장
             question.save()
